@@ -1,0 +1,287 @@
+-- phpMyAdmin SQL Dump
+-- version 4.4.15.5
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost:3306
+-- Generation Time: Jan 31, 2017 at 02:30 AM
+-- Server version: 5.5.49-log
+-- PHP Version: 7.0.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `bdpanaderia`
+--
+CREATE DATABASE IF NOT EXISTS `bdpanaderia` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `bdpanaderia`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tcategorias`
+--
+
+DROP TABLE IF EXISTS `tcategorias`;
+CREATE TABLE IF NOT EXISTS `tcategorias` (
+  `IdCategoria` int(11) NOT NULL,
+  `NombreCategoria` varchar(250) NOT NULL,
+  `Descripcion` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tclientes`
+--
+
+DROP TABLE IF EXISTS `tclientes`;
+CREATE TABLE IF NOT EXISTS `tclientes` (
+  `IdCliente` int(11) NOT NULL,
+  `NombreCliente` varchar(250) NOT NULL,
+  `Telefono` varchar(25) NOT NULL,
+  `Correo` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tfactura`
+--
+
+DROP TABLE IF EXISTS `tfactura`;
+CREATE TABLE IF NOT EXISTS `tfactura` (
+  `IdFactura` int(11) NOT NULL,
+  `Fecha` date NOT NULL,
+  `Total` int(11) NOT NULL,
+  `IdUsuario` int(11) NOT NULL,
+  `IdCliente` int(11) NOT NULL,
+  `IdProductosVenta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tproducto`
+--
+
+DROP TABLE IF EXISTS `tproducto`;
+CREATE TABLE IF NOT EXISTS `tproducto` (
+  `IdProducto` int(11) NOT NULL,
+  `NombreProducto` varchar(250) NOT NULL,
+  `Descripcion` varchar(250) NOT NULL,
+  `Precio` int(11) NOT NULL,
+  `Costo` int(11) NOT NULL,
+  `Stock` int(11) NOT NULL,
+  `Codigo` int(11) NOT NULL,
+  `IdCategoria` int(11) NOT NULL,
+  `IdProveedor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tproductosventa`
+--
+
+DROP TABLE IF EXISTS `tproductosventa`;
+CREATE TABLE IF NOT EXISTS `tproductosventa` (
+  `IdProductosVenta` int(11) NOT NULL,
+  `Cantidad` int(11) NOT NULL,
+  `SubTotal` int(11) NOT NULL,
+  `IdProducto` int(11) NOT NULL,
+  `IdFactura` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tproveedores`
+--
+
+DROP TABLE IF EXISTS `tproveedores`;
+CREATE TABLE IF NOT EXISTS `tproveedores` (
+  `IdProveedor` int(11) NOT NULL,
+  `NombreProveedor` varchar(250) NOT NULL,
+  `Contacto` varchar(250) NOT NULL,
+  `Telefono` varchar(20) NOT NULL,
+  `Correo` varchar(250) NOT NULL,
+  `Direccion` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trolesusuarios`
+--
+
+DROP TABLE IF EXISTS `trolesusuarios`;
+CREATE TABLE IF NOT EXISTS `trolesusuarios` (
+  `IdRol` int(11) NOT NULL,
+  `NombreRol` varchar(250) NOT NULL,
+  `Descripcion` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tusuarios`
+--
+
+DROP TABLE IF EXISTS `tusuarios`;
+CREATE TABLE IF NOT EXISTS `tusuarios` (
+  `IdUsuario` int(11) NOT NULL,
+  `UserName` varchar(50) NOT NULL,
+  `Password` varchar(50) NOT NULL,
+  `NombreUsuario` varchar(250) NOT NULL,
+  `Telefono` varchar(20) NOT NULL,
+  `Correo` varchar(250) NOT NULL,
+  `IdRol` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tcategorias`
+--
+ALTER TABLE `tcategorias`
+  ADD PRIMARY KEY (`IdCategoria`);
+
+--
+-- Indexes for table `tclientes`
+--
+ALTER TABLE `tclientes`
+  ADD PRIMARY KEY (`IdCliente`);
+
+--
+-- Indexes for table `tfactura`
+--
+ALTER TABLE `tfactura`
+  ADD PRIMARY KEY (`IdFactura`),
+  ADD KEY `IdUsuario` (`IdUsuario`),
+  ADD KEY `IdCliente` (`IdCliente`),
+  ADD KEY `IdProductosVenta` (`IdProductosVenta`);
+
+--
+-- Indexes for table `tproducto`
+--
+ALTER TABLE `tproducto`
+  ADD PRIMARY KEY (`IdProducto`),
+  ADD KEY `IdCategoria` (`IdCategoria`),
+  ADD KEY `IdProveedor` (`IdProveedor`);
+
+--
+-- Indexes for table `tproductosventa`
+--
+ALTER TABLE `tproductosventa`
+  ADD PRIMARY KEY (`IdProductosVenta`),
+  ADD KEY `IdProducto` (`IdProducto`),
+  ADD KEY `IdFactura` (`IdFactura`);
+
+--
+-- Indexes for table `tproveedores`
+--
+ALTER TABLE `tproveedores`
+  ADD PRIMARY KEY (`IdProveedor`);
+
+--
+-- Indexes for table `trolesusuarios`
+--
+ALTER TABLE `trolesusuarios`
+  ADD PRIMARY KEY (`IdRol`);
+
+--
+-- Indexes for table `tusuarios`
+--
+ALTER TABLE `tusuarios`
+  ADD PRIMARY KEY (`IdUsuario`),
+  ADD UNIQUE KEY `UserName` (`UserName`),
+  ADD KEY `IdRol` (`IdRol`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tcategorias`
+--
+ALTER TABLE `tcategorias`
+  MODIFY `IdCategoria` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tclientes`
+--
+ALTER TABLE `tclientes`
+  MODIFY `IdCliente` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tfactura`
+--
+ALTER TABLE `tfactura`
+  MODIFY `IdFactura` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tproducto`
+--
+ALTER TABLE `tproducto`
+  MODIFY `IdProducto` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tproductosventa`
+--
+ALTER TABLE `tproductosventa`
+  MODIFY `IdProductosVenta` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tproveedores`
+--
+ALTER TABLE `tproveedores`
+  MODIFY `IdProveedor` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `trolesusuarios`
+--
+ALTER TABLE `trolesusuarios`
+  MODIFY `IdRol` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tusuarios`
+--
+ALTER TABLE `tusuarios`
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tfactura`
+--
+ALTER TABLE `tfactura`
+  ADD CONSTRAINT `tfactura_ibfk_2` FOREIGN KEY (`IdFactura`) REFERENCES `tproductosventa` (`IdFactura`),
+  ADD CONSTRAINT `tfactura_ibfk_1` FOREIGN KEY (`IdCliente`) REFERENCES `tclientes` (`IdCliente`);
+
+--
+-- Constraints for table `tproducto`
+--
+ALTER TABLE `tproducto`
+  ADD CONSTRAINT `tproducto_ibfk_3` FOREIGN KEY (`IdProducto`) REFERENCES `tproductosventa` (`IdProducto`),
+  ADD CONSTRAINT `tproducto_ibfk_1` FOREIGN KEY (`IdProveedor`) REFERENCES `tproveedores` (`IdProveedor`),
+  ADD CONSTRAINT `tproducto_ibfk_2` FOREIGN KEY (`IdCategoria`) REFERENCES `tcategorias` (`IdCategoria`);
+
+--
+-- Constraints for table `tproductosventa`
+--
+ALTER TABLE `tproductosventa`
+  ADD CONSTRAINT `tproductosventa_ibfk_1` FOREIGN KEY (`IdProductosVenta`) REFERENCES `tfactura` (`IdProductosVenta`);
+
+--
+-- Constraints for table `tusuarios`
+--
+ALTER TABLE `tusuarios`
+  ADD CONSTRAINT `tusuarios_ibfk_2` FOREIGN KEY (`IdRol`) REFERENCES `trolesusuarios` (`IdRol`),
+  ADD CONSTRAINT `tusuarios_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `tfactura` (`IdUsuario`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
